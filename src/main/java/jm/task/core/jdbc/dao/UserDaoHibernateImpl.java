@@ -49,6 +49,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
+            System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
@@ -75,7 +76,11 @@ public class UserDaoHibernateImpl implements UserDao {
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
         try (Session session = Util.getSessionFactory().openSession()) {
-            return session.createQuery("FROM User").list();
+            List<User> users = session.createQuery("FROM User").list();
+            for (User user : users) {
+                System.out.println(user);
+            }
+            return users;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
